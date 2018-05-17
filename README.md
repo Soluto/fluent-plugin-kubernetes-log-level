@@ -1,8 +1,8 @@
 # fluent-plugin-kubernetes-log-levels
 
-[Fluentd](https://fluentd.org/) filter plugin to do something.
+[Fluentd](https://fluentd.org/) filter plugin to filter messages according to log level
 
-TODO: write description for you plugin.
+This plugin allows setting a kubernetes label to your pods, and have fluentd filter logs containing a level value lower then the one indicated by the label.
 
 ## Installation
 
@@ -33,6 +33,7 @@ You can generate configuration template:
 ```
 $ fluent-plugin-config-format filter kubernetes-log-levels
 ```
+TODO - generate this doc once the plugin is published
 
 You can copy and paste generated documents here.
 
@@ -41,3 +42,4 @@ You can copy and paste generated documents here.
 * Copyright(c) 2018- yaron-idan
 * License
   * Apache License, Version 2.0
+
