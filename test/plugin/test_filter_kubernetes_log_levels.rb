@@ -24,14 +24,15 @@ class KubernetesLogLevelsFilterTest < Test::Unit::TestCase
 
     @expected_info = []
 
-    @expected_static = [{
-      'level' => 'debug'
+    @expected_static_warning_default = [{
+      'level' => 'warning'
     }]
   end
 
   CONFIG = %[
     log_level_label logging-level
     log_level_key level
+    default_logging_level warning
   ]
 
  # private
@@ -42,7 +43,7 @@ class KubernetesLogLevelsFilterTest < Test::Unit::TestCase
 
   def filter(msg, time = event_time("2017-07-12 19:20:21 UTC"))
     d = create_driver
-    d.run { d.feed('moshe', time, msg) }
+    d.run { d.feed('kubernetes', time, msg) }
     d.filtered_records
   end
 
@@ -50,6 +51,7 @@ class KubernetesLogLevelsFilterTest < Test::Unit::TestCase
     d = create_driver
     assert_equal 'logging-level', d.instance.config['log_level_label']
     assert_equal 'level', d.instance.config['log_level_key']
+    assert_equal 'warning', d.instance.config['default_logging_level']
   end
 
   def test_log_level_higher_then_threshold
@@ -65,6 +67,6 @@ class KubernetesLogLevelsFilterTest < Test::Unit::TestCase
   end 
 
   def test_static_log
-    assert_equal @expected_static, filter({"level"=>"debug"})
+    assert_equal @expected_static_warning_default, filter({"level"=>"warning"})
   end
 end
