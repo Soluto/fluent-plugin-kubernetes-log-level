@@ -49,7 +49,6 @@ module Fluent
       end
 
       def filter(tag, time, record)
-        puts @log_level_label
         log.trace "Start to process record"
         is_logging_label_exist = false
         if record.has_key?("kubernetes")
