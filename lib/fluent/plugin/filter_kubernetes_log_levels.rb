@@ -20,9 +20,11 @@ module Fluent
     class KubernetesLogLevelsFilter < Fluent::Plugin::Filter
       Fluent::Plugin.register_filter("kubernetes_log_levels", self)
 
+      # TODO - solve default values problem
+      config_param :log_level_label, :string
+      config_param :log_level_key, :string
+      config_param :default_logging_level, :string
 
-      config_param :log_level_label, :string,  :default => 'logging-level'
-      config_param :log_level_key, :string, :default => 'level'
       def configure(conf)
           super
       end
@@ -31,7 +33,6 @@ module Fluent
         case level
         when 'trace'
           10
-          
         when 'debug'
           20
         when 'info'
@@ -48,23 +49,34 @@ module Fluent
       end
 
       def filter(tag, time, record)
-        numeric_logging_level = 0
+        puts @log_level_label
+        log.trace "Start to process record"
+        is_logging_label_exist = false
         if record.has_key?("kubernetes")
           if record["kubernetes"].has_key?("labels")
             if record["kubernetes"]["labels"].has_key?(@log_level_label)
+              log.trace "kubernetes.labels.logging-level found"
               numeric_logging_level = level_to_num(record['kubernetes']['labels'][@log_level_label])
+              is_logging_label_exist = true
             end
           end
         end
-        if numeric_logging_level === 0
-          record
-        else
-          numeric_level = level_to_num(record[@log_level_key])
-          if numeric_level >= numeric_logging_level
+        
+        log.trace "Check for logging level existance"
+        if is_logging_label_exist == false
+          if @default_logging_level.nil?
             record
           else
-            nil
+            numeric_logging_level = level_to_num(@default_logging_level)
           end
+        end
+        
+        log.trace "Process current log level"
+        numeric_level = level_to_num(record[@log_level_key])
+        if numeric_level >= numeric_logging_level
+          record
+        else
+          nil
         end
       end
     end
