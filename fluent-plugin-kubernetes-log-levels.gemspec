@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Fluentd plugin for setting kubernetes log levels.}
   spec.description   = %q{Use kubernetes labels to set log levels dynamically.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/Soluto/fluent-plugin-kubernetes-log-level"
   spec.license       = "Apache-2.0"
 
   test_files, files  = `git ls-files -z`.split("\x0").partition do |f|
