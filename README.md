@@ -2,7 +2,7 @@
 
 [Fluentd](https://fluentd.org/) filter plugin to filter messages according to log level
 
-This plugin allows setting a kubernetes label to your pods, and have fluentd filter logs containing a level value lower then the one indicated by the label.
+This plugin allows setting a kubernetes label to your pods, and have fluentd filter logs containing a level value lower then the level indicated by the label.
 
 ## Installation
 
