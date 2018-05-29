@@ -17,8 +17,8 @@ require "fluent/plugin/filter"
 
 module Fluent
   module Plugin
-    class KubernetesLogLevelsFilter < Fluent::Plugin::Filter
-      Fluent::Plugin.register_filter("kubernetes_log_levels", self)
+    class KubernetesLogLevelFilter < Fluent::Plugin::Filter
+      Fluent::Plugin.register_filter("kubernetes_log_level", self)
 
       # TODO - solve default values problem
       config_param :log_level_label, :string

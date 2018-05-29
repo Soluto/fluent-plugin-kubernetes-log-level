@@ -1,4 +1,4 @@
-# fluent-plugin-kubernetes-log-levels
+# fluent-plugin-kubernetes-log-level
 
 [Fluentd](https://fluentd.org/) filter plugin to filter messages according to log level
 
@@ -9,7 +9,7 @@ This plugin allows setting a kubernetes label to your pods, and have fluentd fil
 ### RubyGems
 
 ```
-$ gem install fluent-plugin-kubernetes-log-levels
+$ gem install fluent-plugin-kubernetes-log-level
 ```
 
 ### Bundler
@@ -17,7 +17,7 @@ $ gem install fluent-plugin-kubernetes-log-levels
 Add following line to your Gemfile:
 
 ```ruby
-gem "fluent-plugin-kubernetes-log-levels"
+gem "fluent-plugin-kubernetes-log-level"
 ```
 
 And then execute:
@@ -31,7 +31,7 @@ $ bundle
 You can generate configuration template:
 
 ```
-$ fluent-plugin-config-format filter kubernetes-log-levels
+$ fluent-plugin-config-format filter kubernetes-log-level
 ```
 TODO - generate this doc once the plugin is published
 

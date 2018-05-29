@@ -1,7 +1,7 @@
 require "helper"
-require "fluent/plugin/filter_kubernetes_log_levels.rb"
+require "fluent/plugin/filter_kubernetes_log_level.rb"
 
-class KubernetesLogLevelsFilterTest < Test::Unit::TestCase
+class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   setup do
     Fluent::Test.setup
     @expected_warning = [{
@@ -38,7 +38,7 @@ class KubernetesLogLevelsFilterTest < Test::Unit::TestCase
  # private
 
   def create_driver(conf = CONFIG)
-    Fluent::Test::Driver::Filter.new(Fluent::Plugin::KubernetesLogLevelsFilter).configure(conf)
+    Fluent::Test::Driver::Filter.new(Fluent::Plugin::KubernetesLogLevelFilter).configure(conf)
   end
 
   def filter(msg, time = event_time("2017-07-12 19:20:21 UTC"))

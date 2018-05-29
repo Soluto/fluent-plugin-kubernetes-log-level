@@ -2,13 +2,13 @@ lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name    = "fluent-plugin-kubernetes-log-levels"
+  spec.name    = "fluent-plugin-kubernetes-log-level"
   spec.version = "0.1.0"
   spec.authors = ["yaron-idan"]
   spec.email   = ["yaronidan@gmail.com"]
 
-  spec.summary       = %q{Fluentd plugin for setting kubernetes log levels.}
-  spec.description   = %q{Use kubernetes labels to set log levels dynamically.}
+  spec.summary       = %q{Fluentd plugin for setting kubernetes log level.}
+  spec.description   = %q{Use kubernetes labels to set log level dynamically.}
   spec.homepage      = "https://github.com/Soluto/fluent-plugin-kubernetes-log-level"
   spec.license       = "Apache-2.0"
 
