@@ -28,14 +28,11 @@ $ bundle
 
 ## Configuration
 
-You can generate configuration template:
+Configuration options for fluent.conf are:
 
-```
-$ fluent-plugin-config-format filter kubernetes-log-level
-```
-TODO - generate this doc once the plugin is published
-
-You can copy and paste generated documents here.
+* `log_level_label` - kubernetes label name for setting current log level
+* `log_level_key` - key in log record to indicate the current record's level
+* `default_logging_level` - default logging levels for kubernetes services missing a `log_level_label`
 
 ## Copyright
 
