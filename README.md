@@ -1,4 +1,4 @@
-https://travis-ci.com/Soluto/fluent-plugin-kubernetes-log-level.svg?branch=master
+[![Build Status](https://travis-ci.com/Soluto/fluent-plugin-kubernetes-log-level.svg?branch=master)](https://travis-ci.com/Soluto/fluent-plugin-kubernetes-log-level)
 
 # fluent-plugin-kubernetes-log-level
 
