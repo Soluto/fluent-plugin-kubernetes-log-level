@@ -27,6 +27,16 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
     @expected_static_warning_default = [{
       'level' => 'warning'
     }]
+
+    @expected_warning_serilog = [{
+      'level'      => 'Warning',
+      'kubernetes' => {
+        'labels' => {
+          'logging-level' => 'Warning'
+        }
+      }
+    }]
+
   end
 
   CONFIG = %[
@@ -68,5 +78,9 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
 
   def test_static_log
     assert_equal @expected_static_warning_default, filter({"level"=>"warning"})
+  end
+
+  def test_serilog_structure
+    assert_equal @expected_warning_serilog, filter({"level"=>"Warning", "kubernetes"=>{"labels"=>{"logging-level"=>"Warning"}}})
   end
 end
