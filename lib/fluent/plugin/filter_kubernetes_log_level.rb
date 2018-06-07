@@ -14,9 +14,23 @@
 # limitations under the License.
 
 require "fluent/plugin/filter"
+require "active_support/hash_with_indifferent_access"
 
 module Fluent
   module Plugin
+    class CaseInsensitiveHash < HashWithIndifferentAccess
+      # This method shouldn't need an override, but my tests say otherwise.
+      def [](key)
+        super convert_key(key)
+      end
+    
+      protected
+    
+      def convert_key(key)
+        key.respond_to?(:downcase) ? key.downcase : key
+      end  
+    end
+
     class KubernetesLogLevelFilter < Fluent::Plugin::Filter
       Fluent::Plugin.register_filter("kubernetes_log_level", self)
 
@@ -49,7 +63,11 @@ module Fluent
       end
 
       def filter(tag, time, record)
-        puts @log_level_label
+        
+        h = CaseInsensitiveHash.new
+        h = record
+        puts(h["kubernetes".downcase])
+        
         log.trace "Start to process record"
         is_logging_label_exist = false
         if record.has_key?("kubernetes")

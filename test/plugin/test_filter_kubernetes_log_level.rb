@@ -12,6 +12,15 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
         }
       }
     }]
+    
+    @expected_warning_insensitive = [{
+      'level'      => 'warning',
+      'Kubernetes' => {
+        'labels' => {
+          'logging-level' => 'warning'
+        }
+      }
+    }]
 
     @expected_error = [{
       'level'  => 'error',
@@ -60,6 +69,10 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
 
   def test_log_level_equal_to_threshold
     assert_equal @expected_warning, filter({"level"=>"warning", "kubernetes"=>{"labels"=>{"logging-level"=>"warning"}}})
+  end 
+
+  def test_insensitive
+    assert_equal @expected_warning_insensitive, filter({"level"=>"warning", "Kubernetes"=>{"labels"=>{"logging-level"=>"warning"}}})
   end 
 
   def test_log_level_lower_then_threshold
