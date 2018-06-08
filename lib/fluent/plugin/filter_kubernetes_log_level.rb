@@ -72,7 +72,6 @@ module Fluent
         end
         
         log.trace "Process current log level"
-        puts(record[@log_level_key.capitalize])
         if record.has_key?(@log_level_key.capitalize)
           record[@log_level_key] = record[@log_level_key.capitalize]  
         end
