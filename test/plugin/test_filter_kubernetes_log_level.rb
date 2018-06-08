@@ -37,9 +37,19 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
       'level' => 'warning'
     }]
 
+
     @expected_static_capital_level = [{
       'Level' => 'Warning',
       'level' => 'Warning'
+    }]
+
+    @expected_warning_serilog = [{
+      'level'      => 'Warning',
+      'kubernetes' => {
+        'labels' => {
+          'logging-level' => 'Warning'
+        }
+      }
     }]
   end
 
@@ -88,7 +98,11 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
     assert_equal @expected_static_warning_default, filter({"level"=>"warning"})
   end
 
+
   def test_insensitive_level_key
     assert_equal @expected_static_capital_level, filter({"Level"=>"Warning"})
+
+  def test_serilog_structure
+    assert_equal @expected_warning_serilog, filter({"level"=>"Warning", "kubernetes"=>{"labels"=>{"logging-level"=>"Warning"}}})
   end
 end

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/Soluto/fluent-plugin-kubernetes-log-level.svg?branch=master)](https://travis-ci.com/Soluto/fluent-plugin-kubernetes-log-level)
+
 # fluent-plugin-kubernetes-log-level
 
 [Fluentd](https://fluentd.org/) filter plugin to filter messages according to log level

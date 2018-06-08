@@ -31,17 +31,17 @@ module Fluent
 
       def level_to_num(level)
         case level
-        when 'trace'
+        when 'trace', 'Verbose'
           10
-        when 'debug'
+        when 'debug', 'Debug'
           20
-        when 'info'
+        when 'info', 'Information'
           30
-        when 'warning'
+        when 'warning', 'Warning'
           40
-        when 'error'
+        when 'error', 'Error'
           50
-        when 'fatal'
+        when 'fatal', 'Fatal'
           60
         else
           0
