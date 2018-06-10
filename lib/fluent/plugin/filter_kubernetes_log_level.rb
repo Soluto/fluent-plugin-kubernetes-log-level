@@ -49,7 +49,7 @@ module Fluent
       end
 
       def filter(tag, time, record)
-        puts @log_level_label
+        
         log.trace "Start to process record"
         is_logging_label_exist = false
         if record.has_key?("kubernetes")
@@ -72,7 +72,11 @@ module Fluent
         end
         
         log.trace "Process current log level"
-        numeric_level = level_to_num(record[@log_level_key])
+        if record.has_key?(@log_level_key.capitalize)
+          record[@log_level_key] = record[@log_level_key.capitalize]  
+        end
+        
+        numeric_level = level_to_num(record[@log_level_key].downcase)
         if numeric_level >= numeric_logging_level
           record
         else
