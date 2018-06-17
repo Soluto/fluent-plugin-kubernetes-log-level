@@ -90,6 +90,6 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   end
 
   def test_serilog_structure
-    assert_equal @expected_warning_serilog, filter({"level"=>"Warning", "kubernetes"=>{"labels"=>{"logging-level"=>"Warning"}}})
+    assert_equal @expected_static_capital_level, filter({"Level"=>"Warning"})
   end
 end

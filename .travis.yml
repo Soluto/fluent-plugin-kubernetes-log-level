@@ -6,6 +6,7 @@ deploy:
   api_key:
     secure: nz6MRwf5TslWV/OP2IwklhWAi7VEH8m+4S7Kpd/TAtnn/M0ULPnCn3Ei99hJnpKmia28JEf/SSK6qQCgntQqyZaNs6ohM9ZtNHKL+D2yBb+FWfjql0nQyCTT7mN+6OuFFn3R5dR8mYDCiDaD5WCrGs6caHR3JUMe+3rYprzPJoIOW7txgwI760ynebxJMtebMD9a1fmob1bC/bV1nu7Gil9mjNEi7VrRpN7KmDwFQxXUPGu0L0hixJgSYcE0At+gdcCAsv6AQHMr/CbVRnr6a7nIQBISDjiv6ygzkqYPWpUjv+CACoBotl+M4SlBSCuCW5MsguF8Mti9mx9L2BkzYzkZ10fDNOk5xXxmW5Hg7QaM0EdqMk434AZ+qPa6hNZmAw6s5yqpdR7pKOPSWQJkJWhvvIDGIpcLhbWoordsrpmGiyUqh4ZYZ+bcCVjTmjpgANg5Fsf1KPv/fxAXtoG18R+MyJu9stn73g6kyDiV0llyD6/bi5+xTklnnuLf9IIvdI3121sRoJMaK1EMydyJOyBSG82urcPbduOtOdnfKi30+oSyk16L1vdHKrl7CPFB3ZlNqrke7r4CrbvWEv4GhAbBOUUrL+no1O8ox265NPAWMqzY32pg7IBNayrOZkMNr4AnoT2UDd3c9WCIy5XPK0dlfKw5YC5QTQpNpnlHHlk=
   gem: fluent-plugin-kubernetes-log-level
+  gemspec: fluent-plugin-kubernetes-log-level.gemspec
   on:
     tags: true
     repo: Soluto/fluent-plugin-kubernetes-log-level
