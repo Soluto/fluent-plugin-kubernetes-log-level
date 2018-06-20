@@ -55,7 +55,7 @@ module Fluent
         if record.has_key?("kubernetes")
           if record["kubernetes"].has_key?("labels")
             if record["kubernetes"]["labels"].has_key?(@log_level_label)
-              log.debug "kubernetes.labels.logging-level found with the value #{record['kubernetes']['labels'][@log_level_label]}"
+              log.debug "[App: #{record['kubernetes']['labels']['app']}]: kubernetes.labels.logging-level found with the value #{record['kubernetes']['labels'][@log_level_label]}"
               numeric_logging_level = level_to_num(record['kubernetes']['labels'][@log_level_label])
               is_logging_label_exist = true
             end
@@ -65,26 +65,26 @@ module Fluent
         log.trace "Check for logging level existence"
         if is_logging_label_exist == false
           log.debug "No logging-level label was found"
-          if @default_logging_level.nil?
+          if @default_logging_level.nil?          
             record
           else
             numeric_logging_level = level_to_num(@default_logging_level)
-            log.debug "Logging level set to #{@default_logging_level}"
+            log.debug "[App: #{record['kubernetes']['labels']['app']}]: Logging level set to #{@default_logging_level}"
           end
         end
         
         log.trace "Process current log level"
         if record.has_key?(@log_level_key.capitalize)
-          log.debug "Downcasing capitalized log_level from #{@log_level_key.capitalize}"
+          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Downcasing capitalized log_level from #{@log_level_key.capitalize}"
           record[@log_level_key] = record[@log_level_key.capitalize]  
         end
         
         numeric_level = level_to_num(record[@log_level_key])
         if numeric_level >= numeric_logging_level
-          log.debug "Emitting record with #{record[@log_level_key]} level"
+          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Emitting record with #{record[@log_level_key]} level"
           record
         else
-          log.debug "Dropping record with #{record[@log_level_key]} level"
+          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Dropping record with #{record[@log_level_key]} level"
           nil
         end
       end
