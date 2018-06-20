@@ -8,7 +8,8 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
       'level'      => 'warning',
       'kubernetes' => {
         'labels' => {
-          'logging-level' => 'warning'
+          'logging-level' => 'warning',
+          'app' => 'demo'
         }
       }
     }]
@@ -17,7 +18,8 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
       'level'  => 'error',
       'kubernetes' => {
         'labels' => {
-          'logging-level' => 'warning'
+          'logging-level' => 'warning',
+          'app' => 'demo'
         }
       }
     }]
@@ -25,20 +27,31 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
     @expected_info = []
 
     @expected_static_warning_default = [{
-      'level' => 'warning'
+      'level' => 'warning',
+      'kubernetes' => {
+        'labels' => {
+          'app' => 'demo'
+        }
+      }
     }]
 
 
     @expected_static_capital_level = [{
       'Level' => 'Warning',
-      'level' => 'Warning'
+      'level' => 'Warning',
+      'kubernetes' => {
+        'labels' => {
+          'app' => 'demo'
+        }
+      }
     }]
 
     @expected_warning_serilog = [{
       'level'      => 'Warning',
       'kubernetes' => {
         'labels' => {
-          'logging-level' => 'Warning'
+          'logging-level' => 'Warning',
+          'app' => 'demo'
         }
       }
     }]
@@ -70,26 +83,22 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   end
 
   def test_log_level_higher_then_threshold
-    assert_equal @expected_error, filter({"level"=>"error", "kubernetes"=>{"labels"=>{"logging-level"=>"warning"}}})
+    assert_equal @expected_error, filter({"level"=>"error", "kubernetes"=>{"labels"=>{"logging-level"=>"warning","app"=>"demo"}}})
   end 
 
   def test_log_level_equal_to_threshold
-    assert_equal @expected_warning, filter({"level"=>"warning", "kubernetes"=>{"labels"=>{"logging-level"=>"warning"}}})
+    assert_equal @expected_warning, filter({"level"=>"warning", "kubernetes"=>{"labels"=>{"logging-level"=>"warning","app"=>"demo"}}})
   end 
 
   def test_log_level_lower_then_threshold
-    assert_equal @expected_info, filter({"level"=>"info", "kubernetes"=>{"labels"=>{"logging-level"=>"warning"}}})
+    assert_equal @expected_info, filter({"level"=>"info", "kubernetes"=>{"labels"=>{"logging-level"=>"warning","app"=>"demo"}}})
   end 
 
   def test_static_log
-    assert_equal @expected_static_warning_default, filter({"level"=>"warning"})
-  end
-
-  def test_insensitive_level_key
-    assert_equal @expected_static_capital_level, filter({"Level"=>"Warning"})
+    assert_equal @expected_static_warning_default, filter({"level"=>"warning", "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
   end
 
   def test_serilog_structure
-    assert_equal @expected_static_capital_level, filter({"Level"=>"Warning"})
+    assert_equal @expected_static_capital_level, filter({"Level"=>"Warning", "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
   end
 end
