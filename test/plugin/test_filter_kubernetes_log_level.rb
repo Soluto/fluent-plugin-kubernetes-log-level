@@ -38,7 +38,6 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
 
     @expected_static_capital_level = [{
       'Level' => 'Warning',
-      'level' => 'Warning',
       'kubernetes' => {
         'labels' => {
           'app' => 'demo'
@@ -99,7 +98,7 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
       default_log_level_key level
       default_logging_level warning
     ]
-  
+
     d = create_driver(conf)
     assert_equal 'logging-level', d.instance.config['log_level_label']
     assert_equal 'logging-level-key', d.instance.config['log_level_key_label']

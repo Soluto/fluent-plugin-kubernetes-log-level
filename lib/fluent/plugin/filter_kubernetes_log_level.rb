@@ -20,10 +20,10 @@ module Fluent
     class KubernetesLogLevelFilter < Fluent::Plugin::Filter
       Fluent::Plugin.register_filter("kubernetes_log_level", self)
 
-      config_param :log_level_label, :string
-      config_param :log_level_key_label, :string
-      config_param :default_log_level_key, :string
-      config_param :default_logging_level, :string
+      config_param :log_level_label, :string, :default => 'logging-level'
+      config_param :log_level_key_label, :string, :default => 'logging-level-key'
+      config_param :default_log_level_key, :string, :default => 'level'
+      config_param :default_logging_level, :string, :default => ''
 
       def configure(conf)
           super
@@ -62,30 +62,16 @@ module Fluent
               app = record['kubernetes']['labels']['app']
             end
 
-            log_level_key_label = @log_level_key_label || 'logging-level-key'
-            if record["kubernetes"]["labels"].has_key?(log_level_key_label)
-              log_level_key = record['kubernetes']['labels'][log_level_key_label]
-              log.debug "[App: #{app}]: kubernetes.labels.#{log_level_key_label} found with the value #{log_level_key}"
+            if record["kubernetes"]["labels"].has_key?(@log_level_key_label)
+              log_level_key = record['kubernetes']['labels'][@log_level_key_label]
+              log.debug "[App: #{app}]: kubernetes.labels.#{@log_level_key_label} found with the value #{log_level_key}"
             end
 
-            log_level_label = @log_level_label || 'logging-level'
-            if record["kubernetes"]["labels"].has_key?(log_level_label)
-              logging_level = record['kubernetes']['labels'][log_level_label]
-              log.debug "[App: #{app}]: kubernetes.labels.#{log_level_label} found with the value #{logging_level}"
+            if record["kubernetes"]["labels"].has_key?(@log_level_label)
+              logging_level = record['kubernetes']['labels'][@log_level_label]
+              log.debug "[App: #{app}]: kubernetes.labels.#{@log_level_label} found with the value #{logging_level}"
             end
           end
-        end
-        
-        log.trace "Check for log level key existance"
-        if log_level_key.nil?
-          log.debug "log level key not found, using 'level'"
-          log_level_key = "level"
-        end
-
-        log.trace "Check for logging level existence"
-        if logging_level.nil?
-          log.debug "logging-level was not found, returning record"
-          record
         end
 
         numeric_logging_level = level_to_num(logging_level)
