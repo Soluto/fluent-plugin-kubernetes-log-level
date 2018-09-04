@@ -56,6 +56,15 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
       }
     }]
 
+    @expected_no_default_log_level = [{
+      'level'  => 'error',
+      'kubernetes' => {
+        'labels' => {
+          'app' => 'demo'
+        }
+      }
+    }]
+
     @expected_log_level_key = [{
       'levelname'  => 'error',
       'kubernetes' => {
@@ -68,9 +77,6 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   end
 
   CONFIG = %[
-    log_level_label logging-level
-    log_level_key_label logging-level-key
-    default_log_level_key level
     default_logging_level warning
   ]
 
@@ -87,7 +93,14 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   end
 
   def test_default_configuration
-    d = create_driver
+    conf = %[
+      log_level_label logging-level
+      log_level_key_label logging-level-key
+      default_log_level_key level
+      default_logging_level warning
+    ]
+  
+    d = create_driver(conf)
     assert_equal 'logging-level', d.instance.config['log_level_label']
     assert_equal 'logging-level-key', d.instance.config['log_level_key_label']
     assert_equal 'level', d.instance.config['default_log_level_key']
@@ -112,6 +125,11 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
 
   def test_serilog_structure
     assert_equal @expected_static_capital_level, filter({"Level"=>"Warning", "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
+  end
+
+  def test_no_default_log_level
+    conf = %[]
+    assert_equal @expected_no_default_log_level, filter({"level"=>"error", "kubernetes"=>{"labels"=>{"app"=>"demo"}}}, conf)
   end
 
   def test_custom_log_level
