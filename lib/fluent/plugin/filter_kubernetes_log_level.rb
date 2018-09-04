@@ -22,7 +22,8 @@ module Fluent
 
       # TODO - solve default values problem
       config_param :log_level_label, :string
-      config_param :log_level_key, :string
+      config_param :log_level_key_label, :string
+      config_param :default_log_level_key, :string
       config_param :default_logging_level, :string
 
       def configure(conf)
@@ -30,18 +31,18 @@ module Fluent
       end
 
       def level_to_num(level)
-        case level
-        when 'trace', 'Verbose'
+        case level.downcase
+        when 'trace', 'verbose'
           10
-        when 'debug', 'Debug'
+        when 'debug'
           20
-        when 'info', 'Information'
+        when 'info', 'information'
           30
-        when 'warning', 'Warning'
+        when 'warning'
           40
-        when 'error', 'Error'
+        when 'error'
           50
-        when 'fatal', 'Fatal'
+        when 'fatal'
           60
         else
           0
@@ -52,8 +53,15 @@ module Fluent
         
         log.trace "Start to process record"
         is_logging_label_exist = false
+
+        log_level_key = @default_log_level_key
         if record.has_key?("kubernetes")
           if record["kubernetes"].has_key?("labels")
+            if record["kubernetes"]["labels"].has_key?(@log_level_key_label)
+              log.debug "[App: #{record['kubernetes']['labels']['app']}]: kubernetes.labels.logging-level-key found with the value #{record['kubernetes']['labels'][@log_level_key_label]}"
+              log_level_key = record['kubernetes']['labels'][@log_level_key_label]
+            end
+
             if record["kubernetes"]["labels"].has_key?(@log_level_label)
               log.debug "[App: #{record['kubernetes']['labels']['app']}]: kubernetes.labels.logging-level found with the value #{record['kubernetes']['labels'][@log_level_label]}"
               numeric_logging_level = level_to_num(record['kubernetes']['labels'][@log_level_label])
@@ -61,7 +69,7 @@ module Fluent
             end
           end
         end
-        
+
         log.trace "Check for logging level existence"
         if is_logging_label_exist == false
           log.debug "No logging-level label was found"
@@ -74,17 +82,17 @@ module Fluent
         end
         
         log.trace "Process current log level"
-        if record.has_key?(@log_level_key.capitalize)
-          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Downcasing capitalized log_level from #{@log_level_key.capitalize}"
-          record[@log_level_key] = record[@log_level_key.capitalize]  
+        if record.has_key?(log_level_key.capitalize)
+          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Downcasing capitalized log_level from #{log_level_key.capitalize}"
+          record[log_level_key] = record[log_level_key.capitalize]  
         end
         
-        numeric_level = level_to_num(record[@log_level_key])
+        numeric_level = level_to_num(record[log_level_key])
         if numeric_level >= numeric_logging_level
-          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Emitting record with #{record[@log_level_key]} level"
+          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Emitting record with #{record[log_level_key]} level"
           record
         else
-          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Dropping record with #{record[@log_level_key]} level"
+          log.debug "[App: #{record['kubernetes']['labels']['app']}]: Dropping record with #{record[log_level_key]} level"
           nil
         end
       end

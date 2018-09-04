@@ -33,7 +33,8 @@ $ bundle
 Configuration options for fluent.conf are:
 
 * `log_level_label` - kubernetes label name for setting current log level
-* `log_level_key` - key in log record to indicate the current record's level
+* `log_level_key_label` - kubernetes label name for getting current log level from record
+* `default_log_level_key` - default key in log record to indicate the current record's level
 * `default_logging_level` - default logging levels for kubernetes services missing a `log_level_label`
 
 ## Copyright

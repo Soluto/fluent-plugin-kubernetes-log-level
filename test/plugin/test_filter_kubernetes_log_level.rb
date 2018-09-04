@@ -55,11 +55,22 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
         }
       }
     }]
+
+    @expected_log_level_key = [{
+      'levelname'  => 'error',
+      'kubernetes' => {
+        'labels' => {
+          'logging-level-key' => 'levelname',
+          'app'               => 'demo'
+        }
+      }
+    }]
   end
 
   CONFIG = %[
     log_level_label logging-level
-    log_level_key level
+    log_level_key_label logging-level-key
+    default_log_level_key level
     default_logging_level warning
   ]
 
@@ -69,8 +80,8 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
     Fluent::Test::Driver::Filter.new(Fluent::Plugin::KubernetesLogLevelFilter).configure(conf)
   end
 
-  def filter(msg, time = event_time("2017-07-12 19:20:21 UTC"))
-    d = create_driver
+  def filter(msg, conf = CONFIG, time = event_time("2017-07-12 19:20:21 UTC"))
+    d = create_driver(conf)
     d.run { d.feed('kubernetes', time, msg) }
     d.filtered_records
   end
@@ -78,7 +89,8 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   def test_default_configuration
     d = create_driver
     assert_equal 'logging-level', d.instance.config['log_level_label']
-    assert_equal 'level', d.instance.config['log_level_key']
+    assert_equal 'logging-level-key', d.instance.config['log_level_key_label']
+    assert_equal 'level', d.instance.config['default_log_level_key']
     assert_equal 'warning', d.instance.config['default_logging_level']
   end
 
@@ -100,5 +112,9 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
 
   def test_serilog_structure
     assert_equal @expected_static_capital_level, filter({"Level"=>"Warning", "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
+  end
+
+  def test_custom_log_level
+    assert_equal @expected_log_level_key, filter({"levelname"=>"error", "kubernetes"=>{"labels"=>{"logging-level-key"=>"levelname","app"=>"demo"}}})
   end
 end
