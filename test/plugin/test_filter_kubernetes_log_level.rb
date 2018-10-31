@@ -73,6 +73,15 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
         }
       }
     }]
+
+    @expected_numeric = [{
+      'level'  => 50,
+      'kubernetes' => {
+        'labels' => {
+          'app' => 'demo'
+        }
+      }
+    }]
   end
 
   CONFIG = %[
@@ -133,5 +142,10 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
 
   def test_custom_log_level
     assert_equal @expected_log_level_key, filter({"levelname"=>"error", "kubernetes"=>{"labels"=>{"logging-level-key"=>"levelname","app"=>"demo"}}})
+  end
+
+  def test_numeric_log_level
+    assert_equal @expected_info, filter({"level"=>30, "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
+    assert_equal @expected_numeric, filter({"level"=>50, "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
   end
 end
