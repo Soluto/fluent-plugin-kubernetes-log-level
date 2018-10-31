@@ -30,6 +30,10 @@ module Fluent
       end
 
       def level_to_num(level)
+        if not level.is_a? String
+          return level.to_i
+        end
+
         case level.downcase
         when 'trace', 'verbose'
           10
@@ -44,7 +48,7 @@ module Fluent
         when 'fatal'
           60
         else
-          0
+          level.to_i
         end
       end
 
