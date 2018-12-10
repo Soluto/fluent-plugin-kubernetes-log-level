@@ -74,11 +74,31 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
       }
     }]
 
+    @missing_log_level_key = [{
+      'kubernetes' => {
+        'labels' => {
+          'logging-level-key' => 'notexist',
+          'app'               => 'demo'
+        }
+      }
+    }]
+
     @expected_numeric = [{
       'level'  => 50,
       'kubernetes' => {
         'labels' => {
           'app' => 'demo'
+        }
+      }
+    }]
+
+    @expected_capitialized = [{
+      'Level'  => 'Error',
+      'kubernetes' => {
+        'labels' => {
+          'app' => 'demo',
+          'logging-level'=>'Warning',
+          'logging-level-key'=>'level'
         }
       }
     }]
@@ -88,7 +108,7 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
     default_logging_level warning
   ]
 
- # private
+# private
 
   def create_driver(conf = CONFIG)
     Fluent::Test::Driver::Filter.new(Fluent::Plugin::KubernetesLogLevelFilter).configure(conf)
@@ -147,5 +167,13 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   def test_numeric_log_level
     assert_equal @expected_info, filter({"level"=>30, "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
     assert_equal @expected_numeric, filter({"level"=>50, "kubernetes"=>{"labels"=>{"app"=>"demo"}}})
+  end
+
+  def test_missing_log_level
+    assert_equal [], filter({"level"=>30, "kubernetes"=>{"labels"=>{"app"=>"demo", "logging-level-key"=>"levelname", "logging-level"=>"Warning"}}})
+  end
+
+  def test_capitialize_log_level
+    assert_equal @expected_capitialized, filter({"Level"=>"Error", "kubernetes"=>{"labels"=>{"app"=>"demo", "logging-level-key"=>"level", "logging-level"=>"Warning"}}})
   end
 end

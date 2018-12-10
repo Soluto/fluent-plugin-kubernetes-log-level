@@ -81,11 +81,15 @@ module Fluent
         numeric_logging_level = level_to_num(logging_level)
 
         log.trace "Process current log level"
+        
         if record.has_key?(log_level_key.capitalize)
           log.debug "[App: #{app}]: Downcasing capitalized log_level from #{log_level_key.capitalize}"
           current_log_level = record[log_level_key.capitalize]
-        else
+        elsif record.has_key?(log_level_key)
           current_log_level = record[log_level_key]
+        else
+          log.warning "[App: #{app}]: log level key #{log_level_key} not found in record"
+          return nil
         end
         
         numeric_level = level_to_num(current_log_level)
