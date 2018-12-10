@@ -39,7 +39,7 @@ Configuration options for fluent.conf are:
 
 ## Copyright
 
-* Copyright(c) 2018- yaron-idan
+* Copyright(c) 2018 - Soluto
 * License
   * Apache License, Version 2.0
 
