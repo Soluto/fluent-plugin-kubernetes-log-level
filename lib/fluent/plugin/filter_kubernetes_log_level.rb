@@ -41,7 +41,7 @@ module Fluent
           20
         when 'info', 'information'
           30
-        when 'warning'
+        when 'warning', 'warn'
           40
         when 'error'
           50
