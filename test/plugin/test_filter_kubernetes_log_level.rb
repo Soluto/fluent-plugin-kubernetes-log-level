@@ -74,14 +74,7 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
       }
     }]
 
-    @missing_log_level_key = [{
-      'kubernetes' => {
-        'labels' => {
-          'logging-level-key' => 'notexist',
-          'app'               => 'demo'
-        }
-      }
-    }]
+    @missing_log_level_key = []
 
     @expected_numeric = [{
       'level'  => 50,
@@ -170,7 +163,7 @@ class KubernetesLogLevelFilterTest < Test::Unit::TestCase
   end
 
   def test_missing_log_level
-    assert_equal [], filter({"level"=>30, "kubernetes"=>{"labels"=>{"app"=>"demo", "logging-level-key"=>"levelname", "logging-level"=>"Warning"}}})
+    assert_equal @missing_log_level_key, filter({"kubernetes"=>{"labels"=>{"app"=>"demo", "logging-level-key"=>"levelname", "logging-level"=>"Warning"}}})
   end
 
   def test_capitialize_log_level
