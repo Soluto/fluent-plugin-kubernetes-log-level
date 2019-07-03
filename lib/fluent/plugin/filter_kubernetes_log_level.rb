@@ -88,7 +88,7 @@ module Fluent
         elsif record.has_key?(log_level_key)
           current_log_level = record[log_level_key]
         else
-          log.warning "[App: #{app}]: log level key #{log_level_key} not found in record"
+          log.warn "[App: #{app}]: log level key #{log_level_key} not found in record"
           return nil
         end
         
