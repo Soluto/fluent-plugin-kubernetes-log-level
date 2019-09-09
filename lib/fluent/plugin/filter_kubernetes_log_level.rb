@@ -37,15 +37,15 @@ module Fluent
         case level.downcase
         when 'trace', 'verbose'
           10
-        when 'debug'
+        when 'debug', 'dbug'
           20
         when 'info', 'information'
           30
         when 'warning', 'warn'
           40
-        when 'error'
+        when 'error', 'eror'
           50
-        when 'fatal'
+        when 'fatal', 'crit'
           60
         else
           level.to_i
